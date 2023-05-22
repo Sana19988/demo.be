@@ -32,6 +32,7 @@ public class UserController {
     }
 
     @PostMapping("create")
+    @CrossOrigin("*")
     public ResponseEntity<?> Create(@RequestBody @Valid UserModel model, BindingResult result) {
 
         if (result.hasErrors()) {
