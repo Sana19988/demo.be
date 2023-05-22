@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,11 @@ public class AuthenticationService {
 
         var user = repository.findByEmail(request.getEmail());
 
+        if(user == null)
+        {
+            throw new UsernameNotFoundException("User not found");
+        }
+
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);  // isto priv metoda ovog servisa
@@ -68,6 +74,10 @@ public class AuthenticationService {
         return AuthenticationResponseModel.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .role(user.getRole())
                 .build();
     }
 
