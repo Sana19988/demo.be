@@ -16,17 +16,12 @@ public class UserController {
 
     private IUserService iUserService;
 
-    public UserController(IUserService iUserService) {
-        this.iUserService = iUserService;
-    }
-
     @GetMapping("home")
     public String Home() {
         return "Home page";
     }
 
     @GetMapping("get")
-    @CrossOrigin("*")
     public List<UserModel> GetAll() {
         return iUserService.GetAll();
     }
@@ -35,7 +30,7 @@ public class UserController {
     public ResponseEntity<?> Create(@RequestBody @Valid UserModel model, BindingResult result) {
 
         if (result.hasErrors()) {
-            return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(result.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(iUserService.Create(model), HttpStatus.OK);

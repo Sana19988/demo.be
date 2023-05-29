@@ -23,4 +23,9 @@ public class UserService implements IUserService {
     public UserModel Create(UserModel model) {
         return iUserRepository.save(model);
     }
+
+    @Override
+    public UserModel findByEmail(String email) {
+        return iUserRepository.findByEmail(email);
+    }
 }
